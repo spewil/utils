@@ -16,19 +16,6 @@ def plot_single_trajectory(trajectory, title=None):
         axes[0].set_title(title)
 
 
-def plot_trajectories(trajectories, title=None):
-    fig, axes = plt.subplots(2, 1, figsize=(10, 10))
-    for t in trajectories:
-        axes[0].plot(t[0])
-        axes[1].plot(t[1])
-    axes[0].set_xlabel("Time")
-    axes[1].set_xlabel("Radius")
-    axes[0].set_ylabel("Time")
-    axes[1].set_ylabel("Radius")
-    if not title is None:
-        axes[0].set_title(title)
-
-
 def make_polar_plot():
     fig = plt.figure(figsize=(12, 12))
     ax = fig.add_subplot(projection="polar")
