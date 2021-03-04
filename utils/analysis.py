@@ -15,17 +15,27 @@ import seaborn as sns
 
 def preprocess_emg(recording,
                    nch=32,
-                   start=20,
+                   start=200,
                    end=-1,
                    lowcutoff=5,
-                   highcutoff=20):
+                   highcutoff=60,
+                   mean=None):
+    # highpass, rectify, lowpass, mean subtract per channel
     data_subset = recording[:nch, :]
-    for i, t in enumerate(data_subset):
-        data_subset[i, :] = lowpass(rectify(
-            highpass(data_subset[i, :], cutoff=highcutoff)),
-                                    cutoff=lowcutoff)
-        shortened = highpass(data_subset[:, start - 1:end], cutoff=0.1)
-    return shortened
+    for channel, t in enumerate(data_subset):
+        data_subset[channel, :] = lowpass(rectify(
+            highpass(data_subset[channel, :], cutoff=highcutoff)),
+                                          cutoff=lowcutoff)
+    if mean is None:
+        out = data_subset - data_subset[:, start - 1:end].mean(axis=1).reshape(
+            -1, 1)
+    else:
+        out = data_subset - mean
+    return out[:, start - 1:end]
+
+
+def rectify(a):
+    return np.abs(a)
 
 
 def highpass(sig, cutoff=50):
@@ -62,10 +72,6 @@ def blur(a, sigma=50):
                                            sigma=sigma,
                                            axis=1,
                                            mode='nearest')
-
-
-def rectify(a):
-    return np.abs(a)
 
 
 def demean(a):

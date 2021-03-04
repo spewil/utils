@@ -1,6 +1,11 @@
 import numpy as np
 
 
+def write_array_to_disk(a, name):
+    with open(name, "wb") as file:
+        file.write(a.tobytes())
+
+
 def data_files(directory):
     print(f'+ {directory}')
     paths = []

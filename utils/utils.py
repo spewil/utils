@@ -1,6 +1,17 @@
 import numpy as np
 
 
+def roots_of_unity(num_points, radius=1, offset=0):
+    # offset in radians
+    c = 2j * np.pi / num_points
+    points = [
+        [np.around(x.imag, decimals=2),
+         np.around(x.real, decimals=2)] for x in
+        [radius * np.exp((k * c) + 1j * offset) for k in range(num_points)]
+    ]
+    return np.array(points)
+
+
 def normal(x, mu, sig):
     return np.exp(-np.power(x - mu, 2.) /
                   (2 * np.power(sig, 2.))) * (1 / (sig * np.sqrt(2 * np.pi)))
